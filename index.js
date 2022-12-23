@@ -133,42 +133,104 @@ const scale = document.querySelector('.scale__body');
 const bindMouseEvents = {
 	mousedownElement: null,
 	mouseupElement: null,
-	mousedown(element) { this.mousedownElement = element },
-	mouseup(element) { this.mouseupElement = element },
+	mousedownElementIsHalfAnHour: null,
+	mouseupElementIsHalfAnHour: null,
+	getMousedownElement(element, halfAnHour = false) {
+		this.mousedownElement = element
+		this.mousedownElementIsHalfAnHour = halfAnHour
+	},
+	getMouseupElement(element, halfAnHour = false) {
+		this.mouseupElement = element
+		this.mouseupElementIsHalfAnHour = halfAnHour
+
+		this.compareElements()
+	},
 	compareElements() {
 		if (this.mousedownElement === this.mouseupElement) {
-			console.log('same element')
+			if (this.mousedownElementIsHalfAnHour) {
+				const timeValue = this.mousedownElement.innerText.split(':')[0].trim() + ':30';
+				console.log(timeValue)
+			} else {
+				const timeValue = this.mousedownElement.innerText.replace(/\s/g, '');
+				console.log(timeValue)
+			}
 		} else {
-			console.log(this.mousedownElement, this.mouseupElement)
+			if (this.mousedownElementIsHalfAnHour) {
+				const timeValue = this.mousedownElement.innerText.split(':')[0].trim() + ':30';
+				console.log(timeValue)
+			} else {
+				const timeValue = this.mousedownElement.innerText.replace(/\s/g, '');
+				console.log(timeValue)
+			}
+
+			if (this.mouseupElementIsHalfAnHour) {
+				const timeValue = this.mouseupElement.innerText.split(':')[0].trim() + ':30';
+				console.log(timeValue)
+			} else {
+				const timeValue = this.mouseupElement.innerText.replace(/\s/g, '');
+				console.log(timeValue)
+			}
 		}
 	}
 };
 
-scale.addEventListener('mousedown', e => {
-	if (e.target.classList.contains('scale__hour')) {
-		console.log(e.target)
-		console.log(e.target.textContent.replace(/\s/g, ''))
-		bindMouseEvents.mousedown(e.target)
-	}
-	if (e.target.classList.contains('scale__lines')) {
-		console.log(e.target)
-		console.log(e.target.previousElementSibling.textContent.replace(/\s/g, ''), ' :30')
-		bindMouseEvents.mousedown(e.target)
-	}
-	if (e.target.parentElement.classList.contains('scale__lines')) {
-		console.log(e.target)
-		console.log(e.target.parentElement.previousElementSibling.textContent.replace(/\s/g, ''), ' :30')
-		bindMouseEvents.mousedown(e.target)
-	}
+
+
+scale.addEventListener('mouseup', () => {
+	scale.querySelectorAll('.hover').forEach(el => el.classList.remove('hover'))
 })
 
-scale.addEventListener('mouseup', e => {
-	console.log(e.target);
-	bindMouseEvents.mouseup(e.target)
-	bindMouseEvents.compareElements()
+scale.addEventListener('mouseleave', () => {
+	scale.querySelectorAll('.hover').forEach(el => el.classList.remove('hover'))
 })
 
+scale.querySelectorAll('.scale__hour').forEach(el => {
+	el.addEventListener('mouseenter', e => {
+		if (e.buttons === 1 && e.target.classList.contains('hover')) {
+			e.relatedTarget.classList.remove('hover')
+		} else {
+			e.target.classList.add('hover')
+		}
+	})
 
+	el.addEventListener('mouseleave', e => {
+		if (e.buttons === 0) {
+			e.target.classList.remove('hover')
+		}
+	})
+
+	el.addEventListener('mousedown', e => {
+		bindMouseEvents.getMousedownElement(e.target)
+	})
+
+	el.addEventListener('mouseup', e => {
+		bindMouseEvents.getMouseupElement(e.target)
+	})
+})
+
+scale.querySelectorAll('.scale__lines').forEach(el => {
+	el.addEventListener('mouseenter', e => {
+		if (e.buttons === 1 && e.target.classList.contains('hover')) {
+			e.relatedTarget.classList.remove('hover')
+		} else {
+			e.target.classList.add('hover')
+		}
+	})
+
+	el.addEventListener('mouseleave', e => {
+		if (e.buttons === 0) {
+			e.target.classList.remove('hover')
+		}
+	})
+
+	el.addEventListener('mousedown', e => {
+		bindMouseEvents.getMousedownElement(e.target, true)
+	})
+
+	el.addEventListener('mouseup', e => {
+		bindMouseEvents.getMouseupElement(e.target, true)
+	})
+})
 
 
 

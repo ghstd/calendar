@@ -319,12 +319,15 @@ body {
 	cursor: pointer;
 
 	position: relative;
-
 }
 
-.scale__hour:hover {
+.scale__hour.hover {
 	background-color: rgb(57, 107, 107);
 }
+
+/* .scale__hour:hover {
+	background-color: rgb(57, 107, 107);
+} */
 
 .scale__lines {
 	font-size: 8px;
@@ -340,9 +343,13 @@ body {
 	z-index: 1;
 }
 
-.scale__lines:hover {
+.scale__lines.hover {
 	background-color: rgb(57, 107, 107);
 }
+
+/* .scale__lines:hover {
+	background-color: rgb(57, 107, 107);
+} */
 
 .scale__graph {
 	background-color: #D1F366;
