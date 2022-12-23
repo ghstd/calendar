@@ -278,28 +278,25 @@ body {
 }
 
 .schedule__body {
-	--height-body: 340px;
+	--height-body: 325px;
 	--height-item: calc(var(--height-body) * 8.3 / 100);
 	display: flex;
 	width: 100%;
 	height: var(--height-body);
-
 }
 
-/* test =========*/
 .schedule__scale {
 	flex: 0 0 20%;
 	overflow-y: scroll;
 }
 
+.scale {}
 
 .schedule__scale::-webkit-scrollbar {
 	display: none;
 }
 
-/* test =========*/
 .scale__body {
-	/* flex: 0 0 20%; */
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -308,20 +305,9 @@ body {
 	font-size: 12px;
 	background-color: rgb(30, 61, 61);
 	color: #fff;
-	/* overflow-y: scroll; */
 	user-select: none;
-
-	/* test =========*/
 	width: 50%;
-
-	/* test =========*/
 }
-
-/* .schedule__scale::-webkit-scrollbar {
-	display: none;
-} */
-
-.scale {}
 
 .scale__hour {
 	width: 70%;
@@ -350,7 +336,6 @@ body {
 	align-items: center;
 	border-radius: 25%;
 	cursor: pointer;
-
 	position: relative;
 	z-index: 1;
 }
@@ -358,15 +343,6 @@ body {
 .scale__lines:hover {
 	background-color: rgb(57, 107, 107);
 }
-
-.schedule__records {
-	flex: 0 0 80%;
-	background-color: rgb(25, 41, 70);
-	padding: 10px;
-	overflow: hidden;
-}
-
-/* test =========*/
 
 .scale__graph {
 	background-color: #D1F366;
@@ -420,10 +396,22 @@ body {
 	border-radius: 50%;
 }
 
-/* test =========*/
+.schedule__records {
+	flex: 0 0 80%;
+	background-color: rgb(25, 41, 70);
+	padding: 10px 20px;
+	overflow-y: scroll;
+}
 
+.schedule__records::-webkit-scrollbar {
+	display: none;
+}
 
+.records {}
 
+.records__body {}
+
+.records__form {}
 
 .records__list {}
 
@@ -434,33 +422,22 @@ body {
 	font-size: 20px;
 	margin-bottom: 5px;
 	cursor: pointer;
-	line-height: 20px;
-	max-width: 100%;
-}
-
-.records__text.hidden {
-	display: none;
-}
-
-.records__textarea {
-	display: none;
-	background-color: rgb(25, 41, 70);
-	color: #D0D4E7;
-	font-size: 20px;
-	line-height: 20px;
-	margin-bottom: 5px;
+	position: relative;
+	background-color: rgb(45, 68, 110);
+	padding: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
 	outline: none;
-	resize: none;
-	font-family: Roboto, serif;
-	width: 100%;
-
-	min-height: 65px;
 }
 
-.records__textarea::-webkit-scrollbar {
-	display: none;
-}
-
-.records__textarea.show {
-	display: block;
+.records__time {
+	outline: none;
+	color: #D0D4E7;
+	font-size: 16px;
+	cursor: pointer;
+	background-color: rgb(45, 68, 110);
+	padding: 2px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
 }

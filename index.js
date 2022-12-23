@@ -55,7 +55,7 @@ calendarDays.addEventListener('click', async e => {
 })
 
 
-// Test =============================================================
+// Test Records =============================================================
 
 const form = document.querySelector('.records__form');
 const addRecordButton = document.querySelector('.controls__add-record');
@@ -66,45 +66,107 @@ form.onsubmit = e => {
 	console.log('form is submit!!!')
 }
 
-addRecordButton.addEventListener('click', () => {
+addRecordButton.addEventListener('click', () => addNewRecord())
+
+function addNewRecord(timeValue) {
 	const recordsListItem = document.createElement('li');
-	const text = document.createElement('p');
-	const textarea = document.createElement('textarea');
+	const time = document.createElement('input');
+	const text = document.createElement('div');
 
 	recordsListItem.classList.add('records__item')
-	text.classList.add('records__text', 'hidden')
-	textarea.classList.add('records__textarea', 'show')
+	time.classList.add('records__time')
+	text.classList.add('records__text')
 
+	time.type = "time"
+	text.contentEditable = 'true'
+
+	if (timeValue) time.value = timeValue
+
+	recordsListItem.append(time)
 	recordsListItem.append(text)
-	recordsListItem.append(textarea)
-	recordsList.append(recordsListItem)
+	recordsList.prepend(recordsListItem)
 
-	text.onclick = () => {
-		text.classList.add('hidden')
-		textarea.classList.add('show')
-		textarea.focus()
-	}
+	// text.onfocus = () => {
+	// 	console.log('focus')
+	// }
 
-	textarea.onblur = () => {
-		if (textarea.value === '') {
-			recordsListItem.remove()
+	// text.onblur = () => {
+	// 	console.log('blur')
+	// }
+
+	// time.onblur = () => {
+	// 	console.log(time.value)
+	// }
+
+	text.focus()
+}
+
+// Test Scale =============================================================
+
+const scale = document.querySelector('.scale__body');
+
+// scale.addEventListener('click', e => {
+
+// 	if (e.target.classList.contains('scale__hour')) {
+// 		const timeValue = e.target.textContent.replace(/\s/g, '');
+// 		addNewRecord(timeValue)
+// 		return
+// 	}
+
+// 	if (e.target.classList.contains('scale__lines')) {
+// 		const timeValue = e.target.previousElementSibling.textContent
+// 			.split(':')[0]
+// 			.trim() + ':30';
+// 		addNewRecord(timeValue)
+// 		return
+// 	}
+
+// 	if (e.target.parentElement.classList.contains('scale__lines')) {
+// 		const timeValue = e.target.parentElement.previousElementSibling.textContent
+// 			.split(':')[0]
+// 			.trim() + ':30';
+// 		addNewRecord(timeValue)
+// 		return
+// 	}
+// })
+
+const bindMouseEvents = {
+	mousedownElement: null,
+	mouseupElement: null,
+	mousedown(element) { this.mousedownElement = element },
+	mouseup(element) { this.mouseupElement = element },
+	compareElements() {
+		if (this.mousedownElement === this.mouseupElement) {
+			console.log('same element')
+		} else {
+			console.log(this.mousedownElement, this.mouseupElement)
 		}
-		text.innerText = textarea.value
-		text.classList.remove('hidden')
-		textarea.classList.remove('show')
-		form.requestSubmit()
 	}
+};
 
-	textarea.focus()
+scale.addEventListener('mousedown', e => {
+	if (e.target.classList.contains('scale__hour')) {
+		console.log(e.target)
+		console.log(e.target.textContent.replace(/\s/g, ''))
+		bindMouseEvents.mousedown(e.target)
+	}
+	if (e.target.classList.contains('scale__lines')) {
+		console.log(e.target)
+		console.log(e.target.previousElementSibling.textContent.replace(/\s/g, ''), ' :30')
+		bindMouseEvents.mousedown(e.target)
+	}
+	if (e.target.parentElement.classList.contains('scale__lines')) {
+		console.log(e.target)
+		console.log(e.target.parentElement.previousElementSibling.textContent.replace(/\s/g, ''), ' :30')
+		bindMouseEvents.mousedown(e.target)
+	}
 })
 
-
-
-
-
-
-
-
+scale.addEventListener('mouseup', e => {
+	console.log(e.target);
+	bindMouseEvents.mouseup(e.target)
+	bindMouseEvents.compareElements()
+})
 
 
 
