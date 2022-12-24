@@ -148,7 +148,7 @@ const bindMouseEvents = {
 	compareElements() {
 		if (this.mousedownElement === this.mouseupElement) {
 			if (this.mousedownElementIsHalfAnHour) {
-				const timeValue = this.mousedownElement.innerText.split(':')[0].trim() + ':30';
+				const timeValue = this.mousedownElement.previousElementSibling.innerText.split(':')[0].trim() + ':30';
 				console.log(timeValue)
 			} else {
 				const timeValue = this.mousedownElement.innerText.replace(/\s/g, '');
@@ -156,7 +156,7 @@ const bindMouseEvents = {
 			}
 		} else {
 			if (this.mousedownElementIsHalfAnHour) {
-				const timeValue = this.mousedownElement.innerText.split(':')[0].trim() + ':30';
+				const timeValue = this.mousedownElement.previousElementSibling.innerText.split(':')[0].trim() + ':30';
 				console.log(timeValue)
 			} else {
 				const timeValue = this.mousedownElement.innerText.replace(/\s/g, '');
@@ -164,7 +164,7 @@ const bindMouseEvents = {
 			}
 
 			if (this.mouseupElementIsHalfAnHour) {
-				const timeValue = this.mouseupElement.innerText.split(':')[0].trim() + ':30';
+				const timeValue = this.mouseupElement.previousElementSibling.innerText.split(':')[0].trim() + ':30';
 				console.log(timeValue)
 			} else {
 				const timeValue = this.mouseupElement.innerText.replace(/\s/g, '');
@@ -233,14 +233,34 @@ scale.querySelectorAll('.scale__lines').forEach(el => {
 })
 
 
+const formEl = document.querySelector('.test__form');
+const testEl = document.querySelectorAll('.test__time');
+const submitEl = document.querySelectorAll('.test__submit');
 
 
 
+for (let i = 0; i < testEl.length; i++) {
+	testEl[i].onkeydown = e => {
 
+		if (e.code === 'ArrowRight') {
+			const nextElementIndex = (i + 1) % testEl.length;
+			testEl[nextElementIndex].focus()
+		}
 
+		if (e.code === 'ArrowLeft') {
+			const prevElementIndex = ((i > 0) ? (i - 1) : testEl.length - 1) % testEl.length;
+			testEl[prevElementIndex].focus()
+		}
+	}
+}
 
+formEl.onsubmit = e => {
+	e.preventDefault()
 
-
+	for (let i = 0; i < testEl.length; i++) {
+		console.log(testEl[i].value)
+	}
+}
 
 
 
