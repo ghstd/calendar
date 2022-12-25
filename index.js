@@ -70,19 +70,14 @@ addRecordButton.addEventListener('click', () => addNewRecord())
 
 function addNewRecord(timeValue) {
 	const recordsListItem = document.createElement('li');
-	const time = document.createElement('input');
 	const text = document.createElement('div');
 
 	recordsListItem.classList.add('records__item')
-	time.classList.add('records__time')
 	text.classList.add('records__text')
 
-	time.type = "time"
 	text.contentEditable = 'true'
 
-	if (timeValue) time.value = timeValue
-
-	recordsListItem.append(time)
+	const timeForm = createRecordsTimeElement(recordsListItem);
 	recordsListItem.append(text)
 	recordsList.prepend(recordsListItem)
 
@@ -94,11 +89,7 @@ function addNewRecord(timeValue) {
 	// 	console.log('blur')
 	// }
 
-	// time.onblur = () => {
-	// 	console.log(time.value)
-	// }
-
-	text.focus()
+	timeForm.firstElementChild.focus()
 }
 
 // Test Scale =============================================================
@@ -222,47 +213,69 @@ scale.querySelectorAll('.scale__lines').forEach(el => {
 			e.target.classList.remove('hover')
 		}
 	})
-
 	el.addEventListener('mousedown', e => {
-		bindMouseEvents.getMousedownElement(e.target, true)
+		bindMouseEvents.getMousedownElement(e.target.closest('.scale__lines'), true)
 	})
 
 	el.addEventListener('mouseup', e => {
-		bindMouseEvents.getMouseupElement(e.target, true)
+		bindMouseEvents.getMouseupElement(e.target.closest('.scale__lines'), true)
 	})
 })
 
+function createRecordsTimeElement(rootElement) {
 
-const formEl = document.querySelector('.test__form');
-const testEl = document.querySelectorAll('.test__time');
-const submitEl = document.querySelectorAll('.test__submit');
+	const timeForm = document.createElement('form');
 
+	timeForm.classList.add('records__time')
+	timeForm.innerHTML = `
+	<input class="records__time-input" type="text" maxlength="2">
+	<input class="records__time-input" type="text" maxlength="2">
+	<input class="records__time-input" type="text" maxlength="2">
+	<input class="records__time-input" type="text" maxlength="2">
+	<button class="records__time-submit" type="submit">add</button>
+`
+	rootElement.append(timeForm)
 
+	const timeInput = timeForm.querySelectorAll('.records__time-input');
+	const timeSubmit = timeForm.querySelectorAll('.records__time-submit');
 
-for (let i = 0; i < testEl.length; i++) {
-	testEl[i].onkeydown = e => {
+	for (let i = 0; i < timeInput.length; i++) {
+		timeInput[i].onkeydown = e => {
 
-		if (e.code === 'ArrowRight') {
-			const nextElementIndex = (i + 1) % testEl.length;
-			testEl[nextElementIndex].focus()
-		}
+			if (e.code === 'ArrowRight') {
+				const nextElementIndex = (i + 1) % timeInput.length;
+				timeInput[nextElementIndex].focus()
+			}
 
-		if (e.code === 'ArrowLeft') {
-			const prevElementIndex = ((i > 0) ? (i - 1) : testEl.length - 1) % testEl.length;
-			testEl[prevElementIndex].focus()
+			if (e.code === 'ArrowLeft') {
+				const prevElementIndex = ((i > 0) ? (i - 1) : timeInput.length - 1) % timeInput.length;
+				timeInput[prevElementIndex].focus()
+			}
 		}
 	}
-}
 
-formEl.onsubmit = e => {
-	e.preventDefault()
+	timeForm.onsubmit = e => {
+		e.preventDefault()
 
-	for (let i = 0; i < testEl.length; i++) {
-		console.log(testEl[i].value)
+		const showTimeElement = document.createElement('div');
+		const showTimeValue = `from ${timeInput[0].value} : ${timeInput[1].value} to ${timeInput[2].value} : ${timeInput[3].value}`;
+
+		showTimeElement.onclick = () => {
+			timeForm.classList.remove('hidden')
+			showTimeElement.remove()
+			timeForm.firstElementChild.focus()
+		}
+
+		showTimeElement.classList.add('records__time-label')
+		showTimeElement.textContent = showTimeValue
+		timeForm.classList.add('hidden')
+
+		rootElement.prepend(showTimeElement)
+		rootElement.lastElementChild.focus()
 	}
+
+	return timeForm
 }
-
-
 
 
 
