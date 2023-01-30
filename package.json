@@ -1,21 +1,25 @@
 {
-  "name": "calendar-test",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ghstd/calendar.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ghstd/calendar/issues"
-  },
-  "homepage": "https://github.com/ghstd/calendar#readme"
+	"name": "calendar-test",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ghstd/calendar.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/ghstd/calendar/issues"
+	},
+	"homepage": "https://github.com/ghstd/calendar#readme",
+	"engines": {
+		"node": "v18.12.1",
+		"npm": "8.19.2"
+	}
 }
