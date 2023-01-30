@@ -19,7 +19,6 @@
 	},
 	"homepage": "https://github.com/ghstd/calendar#readme",
 	"engines": {
-		"node": "v18.12.1",
-		"npm": "8.19.2"
+		"node": "v18.12.1"
 	}
 }
