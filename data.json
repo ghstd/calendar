@@ -1,68 +1,28 @@
-{
-	"2022": [
-		[],
-		[],
-		[],
-		[],
-		[],
-		[],
-		[],
-		[],
-		[
+[
+	{
+		"year": 2023,
+		"months": [
 			{
-				"date": 1661979600000,
-				"records": [
-					"some text",
-					"some text",
-					"some text"
+				"month": 0,
+				"days": [
+					{
+						"day": 30,
+						"notes": [
+							{
+								"timeStart": "01:00",
+								"timeEnd": "02:00",
+								"text": "test 1"
+							},
+							{
+								"timeStart": "02:00",
+								"timeEnd": "03:00",
+								"text": "test 2",
+								"important": true
+							}
+						]
+					}
 				]
-			},
-			{
-				"date": 1662066000000,
-				"records": [
-					"some text",
-					"some text",
-					"some text"
-				]
-			},
-			{
-				"date": 1662152400000,
-				"records": [
-					"some text",
-					"some text",
-					"some text"
-				]
-			},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{}
-		],
-		[],
-		[],
-		[]
-	]
-}
+			}
+		]
+	}
+]
