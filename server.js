@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request, response) => {
 
 	// OPTIONS
 	if (request.method === 'OPTIONS') {
@@ -10,11 +10,24 @@ const server = http.createServer((request, response) => {
 		response.setHeader('Access-Control-Allow-Headers', '*')
 		response.setHeader('Access-Control-Max-Age', 2592000)
 		response.end()
+		return
 	}
 
 	// GET /importantNotes
 	if (request.url === '/importantNotes') {
-		const serverData = JSON.parse(fs.readFileSync('data.json', (err, data) => data));
+		async function _getDataFromDB() {
+			const response = await fetch('https://api.jsonbin.io/v3/b/63d81542ebd26539d06f4b54', {
+				method: 'GET',
+				headers: {
+					'Content-type': 'application/json',
+					'X-Master-Key': '$2b$10$xaWeFLridtnNorEUAg.CP.6TLeGmu/X/YlKoIIAUh1adEyot8T6ei'
+				}
+			});
+			const data = await response.json();
+			return data.record
+		}
+
+		const serverData = await _getDataFromDB();
 		const importantNotes = [];
 
 		serverData.forEach(year => {
@@ -40,14 +53,27 @@ const server = http.createServer((request, response) => {
 		response.setHeader('Access-Control-Allow-Headers', '*')
 		response.setHeader('Access-Control-Max-Age', 2592000)
 		response.end(JSON.stringify(importantNotes))
+		return
 	}
 
 	// GET /weekTasks
 	if (request.url === '/weekTasks') {
+		async function _getDataFromDB() {
+			const response = await fetch('https://api.jsonbin.io/v3/b/63d81542ebd26539d06f4b54', {
+				method: 'GET',
+				headers: {
+					'Content-type': 'application/json',
+					'X-Master-Key': '$2b$10$xaWeFLridtnNorEUAg.CP.6TLeGmu/X/YlKoIIAUh1adEyot8T6ei'
+				}
+			});
+			const data = await response.json();
+			return data.record
+		}
+
+		const serverData = await _getDataFromDB();
 		const date = new Date();
 		const firstWeekday = date.getDate() - ((date.getDay() === 0 ? 7 : date.getDay()) - 1);
 		date.setDate(firstWeekday)
-		const serverData = JSON.parse(fs.readFileSync('data.json', (err, data) => data));
 
 		const weekTasks = [];
 
@@ -70,18 +96,31 @@ const server = http.createServer((request, response) => {
 		response.setHeader('Access-Control-Allow-Headers', '*')
 		response.setHeader('Access-Control-Max-Age', 2592000)
 		response.end(JSON.stringify(weekTasks))
+		return
 	}
 
 	// GET /notes
 	if (/notes/.test(request.url) && request.method === 'GET') {
-		const serverData = JSON.parse(fs.readFileSync('data.json', (err, data) => data));
+		async function _getDataFromDB() {
+			const response = await fetch('https://api.jsonbin.io/v3/b/63d81542ebd26539d06f4b54', {
+				method: 'GET',
+				headers: {
+					'Content-type': 'application/json',
+					'X-Master-Key': '$2b$10$xaWeFLridtnNorEUAg.CP.6TLeGmu/X/YlKoIIAUh1adEyot8T6ei'
+				}
+			});
+			const data = await response.json();
+			return data.record
+		}
+
+		const serverData = await _getDataFromDB();
 		const urlParams = new URL(request.url, `http://${request.headers.host}`).searchParams;
 		const inputParams = {};
 		for (const [key, value] of urlParams) {
 			inputParams[key] = parseInt(value)
 		}
 
-		function checkingSavedData() {
+		function _checkingSavedData() {
 			const year = serverData.find(item => item.year === inputParams.year);
 
 			if (!year) {
@@ -124,7 +163,7 @@ const server = http.createServer((request, response) => {
 				}
 			}
 		}
-		checkingSavedData()
+		_checkingSavedData()
 
 		const outputData = serverData
 			.find(item => item.year === inputParams.year)
@@ -138,6 +177,7 @@ const server = http.createServer((request, response) => {
 		response.setHeader('Access-Control-Allow-Headers', '*')
 		response.setHeader('Access-Control-Max-Age', 2592000)
 		response.end(JSON.stringify(outputData))
+		return
 	}
 
 	// POST
@@ -152,8 +192,20 @@ const server = http.createServer((request, response) => {
 			.on('data', (chunk) => {
 				body.push(chunk);
 			})
-			.on('end', () => {
-				const serverData = JSON.parse(fs.readFileSync('data.json', (err, data) => data));
+			.on('end', async () => {
+				async function _getDataFromDB() {
+					const response = await fetch('https://api.jsonbin.io/v3/b/63d81542ebd26539d06f4b54', {
+						method: 'GET',
+						headers: {
+							'Content-type': 'application/json',
+							'X-Master-Key': '$2b$10$xaWeFLridtnNorEUAg.CP.6TLeGmu/X/YlKoIIAUh1adEyot8T6ei'
+						}
+					});
+					const data = await response.json();
+					return data.record
+				}
+
+				const serverData = await _getDataFromDB();
 				const inputData = JSON.parse(body.toString());
 				const urlParams = new URL(request.url, `http://${request.headers.host}`).searchParams;
 				const inputParams = {};
@@ -161,7 +213,7 @@ const server = http.createServer((request, response) => {
 					inputParams[key] = parseInt(value)
 				}
 
-				function checkingSavedData() {
+				function _checkingSavedData() {
 					const year = serverData.find(item => item.year === inputParams.year);
 
 					if (!year) {
@@ -204,7 +256,7 @@ const server = http.createServer((request, response) => {
 						}
 					}
 				}
-				checkingSavedData()
+				_checkingSavedData()
 
 				const targetData = serverData
 					.find(item => item.year === inputParams.year)
@@ -215,8 +267,7 @@ const server = http.createServer((request, response) => {
 
 				targetData.notes = inputData.notes
 
-				// =============
-				function deleteEmptyItems() {
+				function _deleteEmptyItems() {
 					const year = serverData.find(item => item.year === inputParams.year);
 					const month = year.months.find(item => item.month === inputParams.month);
 					const day = month.days.find(item => item.day === inputParams.day);
@@ -236,20 +287,27 @@ const server = http.createServer((request, response) => {
 					if (!month.days.length) {
 						year.months.splice(year.months.findIndex(item => item === month), 1)
 					}
-					if (!year.months.length) {
-						serverData.splice(serverData.findIndex(item => item === year), 1)
-					}
 				}
-				deleteEmptyItems()
-				// =============
+				_deleteEmptyItems()
 
-				fs.writeFileSync('data.json', JSON.stringify(serverData));
+				function _putDataInDB(value) {
+					fetch('https://api.jsonbin.io/v3/b/63d81542ebd26539d06f4b54', {
+						method: 'PUT',
+						headers: {
+							'Content-type': 'application/json',
+							'X-Master-Key': '$2b$10$xaWeFLridtnNorEUAg.CP.6TLeGmu/X/YlKoIIAUh1adEyot8T6ei'
+						},
+						body: JSON.stringify(value)
+					})
+				}
+				_putDataInDB(serverData)
 
 				response.setHeader('Access-Control-Allow-Origin', '*')
 				response.setHeader('Access-Control-Allow-Methods', '*')
 				response.setHeader('Access-Control-Allow-Headers', '*')
 				response.setHeader('Access-Control-Max-Age', 2592000)
 				response.end()
+				return
 			})
 	}
 });
