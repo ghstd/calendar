@@ -515,8 +515,8 @@ const server = http.createServer(async (request, response) => {
 				}
 				_deleteEmptyItems()
 
-				function _putDataInDB(value) {
-					fetch('https://api.jsonbin.io/v3/b/63d81542ebd26539d06f4b54', {
+				async function _putDataInDB(url, value) {
+					fetch(url, {
 						method: 'PUT',
 						headers: {
 							'Content-type': 'application/json',
@@ -525,7 +525,7 @@ const server = http.createServer(async (request, response) => {
 						body: JSON.stringify(value)
 					})
 				}
-				_putDataInDB(serverData)
+				await _putDataInDB(url, serverData)
 
 				_setHeaders(response)
 				response.end(JSON.stringify({ status: '' }))
