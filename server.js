@@ -528,7 +528,7 @@ const server = http.createServer(async (request, response) => {
 				_putDataInDB(serverData)
 
 				_setHeaders(response)
-				response.end()
+				response.end(JSON.stringify({ status: '' }))
 				return
 			})
 	}
