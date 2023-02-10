@@ -9,13 +9,14 @@ const server = http.createServer(async (request, response) => {
 	function _setHeaders(response) {
 		response.setHeader('Access-Control-Allow-Credentials', 'true')
 		response.setHeader('Access-Control-Allow-Origin', request.headers.origin)
-		response.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+		response.setHeader('Access-Control-Allow-Headers', ['Content-Type', 'usecalendarkey'])
 		response.setHeader('Access-Control-Allow-Methods', ['OPTIONS', 'GET', 'POST'])
 		response.setHeader('Access-Control-Max-Age', 600)
 	}
 
 	function _parseCookie() {
-		return request.headers.cookie?.split(';').find(str => /useCalendarKey/.test(str))?.trim().split('=')[1];
+		// return request.headers.cookie?.split(';').find(str => /useCalendarKey/.test(str))?.trim().split('=')[1];
+		return request.headers.usecalendarkey
 	}
 
 	async function _getUrlFromDBByUserKey() {
@@ -112,6 +113,8 @@ const server = http.createServer(async (request, response) => {
 
 					_setHeaders(response)
 					response.setHeader('Content-Type', 'text/plain')
+					response.setHeader('usecalendarkey', `${usersInDB[user].key}`)
+					response.setHeader('Access-Control-Expose-Headers', ['usecalendarkey'])
 					response.setHeader('Set-Cookie', [`useCalendarKey=${usersInDB[user].key};Max-Age=259200;Secure;HttpOnly`])
 					response.end('success login')
 				}
@@ -204,6 +207,8 @@ const server = http.createServer(async (request, response) => {
 
 					_setHeaders(response)
 					response.setHeader('Content-Type', 'text/plain')
+					response.setHeader('usecalendarkey', `${newUserKey}`)
+					response.setHeader('Access-Control-Expose-Headers', ['usecalendarkey'])
 					response.setHeader('Set-Cookie', [`useCalendarKey=${newUserKey};Max-Age=259200;Secure;HttpOnly`])
 					response.end('success login')
 				}
